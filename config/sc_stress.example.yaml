@@ -1,0 +1,137 @@
+﻿# ===========================================================================
+# TEMPLATE - the real config/<NAME>.yaml is git-ignored because it holds a
+# personal API key.  Create yours with:
+#     copy config\<NAME>.example.yaml config\<NAME>.yaml
+# then replace the TODO values below:
+#   * api_key   your Gemini / OpenAI-compatible API key
+#   * pdf_path  path to the input PDF (PDFs are not shipped with the repo)
+#   * save_path directory for the built index and run outputs
+# ===========================================================================
+# Self-Correcting RAG - laptop-safe BookRAG baseline
+# Hardware target: CPU / 16 GB RAM
+# LLM + VLM: Gemini API
+# Embedding + reranker: lightweight local Qwen models
+pdf_path: TODO   # path to the input PDF (not shipped with the repository)
+
+save_path: TODO   # where indexes and run outputs are written
+# --------------------------------------------------
+# Main LLM
+# --------------------------------------------------
+llm:
+  model_name: gemini-3.1-flash-lite
+  api_key: TODO
+  api_base: https://generativelanguage.googleapis.com/v1beta/openai/
+  backend: openai
+  max_tokens: 5000
+  temperature: 0.1
+  frequency_penalty: 0.0
+  presence_penalty: 0.0
+  max_workers: 1
+
+# --------------------------------------------------
+# Vision-language model
+# --------------------------------------------------
+vlm:
+  model_name: gemini-3.1-flash-lite
+  api_key: TODO
+  api_base: https://generativelanguage.googleapis.com/v1beta/openai/
+  temperature: 0.1
+  max_tokens: 6000
+  backend: gpt
+
+# --------------------------------------------------
+# Basic indexing
+# --------------------------------------------------
+index:
+  chunk_size: 512
+  overlap: 50
+
+# --------------------------------------------------
+# PDF parsing
+# --------------------------------------------------
+mineru:
+  backend: pipeline
+  method: auto
+  server_url: ""
+  lang: en
+# --------------------------------------------------
+# Hierarchical document tree
+# --------------------------------------------------
+tree:
+  node_keywords: True
+  node_summary: False
+  use_vlm: False
+# --------------------------------------------------
+# Knowledge graph
+# --------------------------------------------------
+graph:
+  extractor_type: "llm"
+  local_model_name: "en_core_web_sm"
+  image_description_force: True
+  max_gleaning: 0
+  refine_type: "advanced"
+
+  embedding_config:
+    model_name: Qwen/Qwen3-Embedding-0.6B
+    backend: local
+    max_length: 4096
+    device: auto
+    api_base: ""
+
+  reranker_config:
+    model_name: Qwen/Qwen3-Reranker-0.6B
+    max_length: 4096
+    device: auto
+    backend: local
+    api_base: ""
+
+# --------------------------------------------------
+# Vector database
+# --------------------------------------------------
+vdb:
+  # Keep the first baseline text-only.
+  # This avoids loading the much heavier 2B GME multimodal embedder.
+  mm_embedding: False
+
+  vdb_dir_name: "Tree_vdb"
+  collection_name: "TreeVDB"
+
+  embedding_config:
+    model_name: Qwen/Qwen3-Embedding-0.6B
+    backend: local
+    max_length: 4096
+    device: auto
+    api_base: ""
+
+rag_force_reprocess: True
+
+# --------------------------------------------------
+# BookRAG retrieval
+# --------------------------------------------------
+rag:
+  strategy: gbc
+  variant: standard
+
+  topk: 1
+  sim_threshold_e: 0.3
+  select_depth: 2
+
+  # This is BookRAG's retry for valid LLM responses.
+  # It is NOT our future self-correcting recovery budget.
+  max_retry: 2
+  self_correcting_enabled: true
+  max_recovery_attempts: 4
+  recovery_max_nodes: 25
+  reranker_config:
+    model_name: Qwen/Qwen3-Reranker-0.6B
+    max_length: 4096
+    device: auto
+    backend: local
+    api_base: ""
+
+  # Currently retained for compatibility with BookRAG's config schema.
+  # We are not using the heavy multimodal reranker in our first baseline.
+  mm_reranker_config:
+    model_name: Alibaba-NLP/gme-Qwen2-VL-2B-Instruct
+    device: auto
+

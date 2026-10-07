@@ -1,0 +1,99 @@
+[
+  {
+    "id": "Q01",
+    "category": "direct_fact",
+    "question": "Who manufactures Valve X?",
+    "expected_identifiers": ["Asterion Controls"],
+    "expected_answer_type": "fact",
+    "notes": "Direct factual lookup. Valve X manufacturer."
+  },
+  {
+    "id": "Q02",
+    "category": "controlled_absence",
+    "question": "What is the operating voltage of Valve X?",
+    "expected_identifiers": [],
+    "expected_answer_type": "absence",
+    "absence_phrases": ["not specified", "not available", "not stated", "not provided", "not given", "cannot be inferred", "should not be inferred", "no operating voltage"],
+    "notes": "Voltage not specified in manual. Answer should state absence."
+  },
+  {
+    "id": "Q03",
+    "category": "current_value",
+    "question": "What is the current inspection interval for Valve X?",
+    "expected_identifiers": ["500"],
+    "expected_answer_type": "fact",
+    "notes": "Current value is 500 operating hours. Historical 450 is superseded."
+  },
+  {
+    "id": "Q04",
+    "category": "direct_alias",
+    "question": "What is the equipment identifier for Valve X?",
+    "expected_identifiers": ["VX-21"],
+    "expected_answer_type": "fact",
+    "notes": "Valve X = VX-21 alias relationship."
+  },
+  {
+    "id": "Q05",
+    "category": "pump_alias",
+    "question": "What is the equipment identifier for Pump Y?",
+    "expected_identifiers": ["PX-40"],
+    "expected_answer_type": "fact",
+    "notes": "Pump Y = PX-40 alias relationship."
+  },
+  {
+    "id": "Q06",
+    "category": "direct_strainer",
+    "question": "Which inlet strainer protects Pump Y?",
+    "expected_identifiers": ["ST-C40"],
+    "expected_answer_type": "fact",
+    "notes": "Direct strainer lookup for Pump Y."
+  },
+  {
+    "id": "Q07",
+    "category": "multi_hop",
+    "question": "What strainer protects the pump that serves Reactor R-2?",
+    "expected_identifiers": ["ST-C40"],
+    "expected_answer_type": "fact",
+    "notes": "Reactor R-2 -> Pump Y/PX-40 -> ST-C40"
+  },
+  {
+    "id": "Q08",
+    "category": "multi_hop_alias_strainer",
+    "question": "Which pump serves Reactor R-2, and what strainer protects that pump?",
+    "expected_identifiers": ["PX-40", "ST-C40"],
+    "expected_answer_type": "fact",
+    "notes": "Must identify both pump and strainer."
+  },
+  {
+    "id": "Q09",
+    "category": "indirect_paraphrase",
+    "question": "Which inlet protection device belongs to the circulation equipment serving Reactor R-2?",
+    "expected_identifiers": ["ST-C40"],
+    "expected_answer_type": "fact",
+    "notes": "Paraphrased multi-hop. Inlet protection = strainer."
+  },
+  {
+    "id": "Q10",
+    "category": "alias_strainer_composite",
+    "question": "For the circulation equipment serving Reactor R-2, what is its alternate identifier and which inlet strainer protects it?",
+    "expected_identifiers": ["PX-40", "ST-C40"],
+    "expected_answer_type": "fact",
+    "notes": "Composite: alternate identifier (PX-40) + strainer (ST-C40)."
+  },
+  {
+    "id": "Q11",
+    "category": "legacy_actuator",
+    "question": "What is the current actuator for Valve X, and which legacy actuator is no longer preferred?",
+    "expected_identifiers": ["AX-4", "AX-3"],
+    "expected_answer_type": "fact",
+    "notes": "Current AX-4, legacy AX-3."
+  },
+  {
+    "id": "Q12",
+    "category": "service_bulletin",
+    "question": "What service bulletin supersedes older Valve X maintenance guidance?",
+    "expected_identifiers": ["SB-17"],
+    "expected_answer_type": "fact",
+    "notes": "SB-17 supersedes older guidance."
+  }
+]
